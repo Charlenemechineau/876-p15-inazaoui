@@ -32,9 +32,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    //me permet de  stocker les rôles de l'utilisateur dans la base de données sous forme de tableau JSON
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    // me permet de stocker le mot de passe haché de l'utilisateur dans la base de données
     #[ORM\Column(nullable: true)]
     private ?string $password = null;
 

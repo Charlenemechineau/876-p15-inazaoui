@@ -13,7 +13,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\AlbumRepository; // Me permet  d'utiliser le AlbumRepository pour récupérer les albums//
 use Doctrine\ORM\EntityManagerInterface; //Me permet d'utiliser l'EntityManagerInterface pour gérer les entités//
 use Symfony\Component\HttpFoundation\Response; // Me permet d'utiliser la classe Response pour retourner une réponse HTTP//
+use Symfony\Component\Security\Http\Attribute\IsGranted; // Me permet d'utiliser l'annotation IsGranted pour vérifier les autorisations de l'utilisateur//
 
+#[IsGranted('ROLE_ADMIN')]
 class AlbumController extends AbstractController
 {
 

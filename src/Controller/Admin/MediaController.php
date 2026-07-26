@@ -31,11 +31,11 @@ class MediaController extends AbstractController
 
         $medias = $mediaRepository->findBy(
             $criteria,
-            ['id' => 'ASC'],
+            ['id' => 'DESC'],
             25,
             25 * ($page - 1)
         );
-        $total = $mediaRepository->count([]);
+        $total = $mediaRepository->count($criteria);
 
         return $this->render('admin/media/index.html.twig', [
             'medias' => $medias,
@@ -81,6 +81,19 @@ class MediaController extends AbstractController
      ): Response
     {
         $media = $mediaRepository->find($id);
+
+        if (!$media) {
+            throw $this->createNotFoundException('Média introuvable.');
+        }
+
+        if (
+            !$this->isGranted('ROLE_ADMIN')
+            && $media->getUser() !== $this->getUser()
+        ) {
+            throw $this->createAccessDeniedException(
+                'Vous ne pouvez pas supprimer ce média.'
+            );
+        }
 
         $entityManager->remove($media);
         $entityManager->flush();

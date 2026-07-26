@@ -17,7 +17,7 @@ security:
             form_login:
                 login_path: admin_login
                 check_path: admin_login
-                default_target_path: admin_album_index
+                default_target_path: admin_media_index
             logout:
                 path: app_logout
     role_hierarchy:
