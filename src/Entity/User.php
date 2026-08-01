@@ -23,6 +23,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $admin = false;
 
+    // Permet de savoir si un utilisateur est bloqué.
+    // Un utilisateur bloqué ne peut plus se connecter à l'application.
+    #[ORM\Column]
+    private bool $blocked = false;
+
     #[ORM\Column]
     private ?string $name;
 
@@ -103,6 +108,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdmin(bool $admin): void
     {
         $this->admin = $admin;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->blocked;
+    }
+
+    public function setBlocked(bool $blocked): static
+    {
+        $this->blocked = $blocked;
+
+        return $this;
     }
 
     /**
