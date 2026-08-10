@@ -25,7 +25,7 @@ class HomeController extends AbstractController
     #[Route("/guests", name:"guests")]
     public function guests(UserRepository $userRepository): Response
     {
-        $guests = $userRepository->findBy(['admin' => false]);
+        $guests = $userRepository->findGuestsWithMedias();
 
         return $this->render('front/guests.html.twig', [
             'guests' => $guests

@@ -64,4 +64,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //            ->getOneOrNullResult()
 //        ;
 //    }
+// Me permet de récupérer tous les invités avec leurs médias
+// en une seule requête pour éviter le problème N+1.
+    public function findGuestsWithMedias(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->leftJoin('u.medias', 'm')
+            ->addSelect('m')
+            ->where('u.admin = :admin')
+            ->setParameter('admin', false)
+            ->getQuery()
+            ->getResult();
+    }
 }
