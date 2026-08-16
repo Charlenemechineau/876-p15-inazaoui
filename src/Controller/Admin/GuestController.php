@@ -13,6 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+
 // Réserve l’ensemble des actions de ce contrôleur à l’administratrice Ina.
 #[IsGranted('ROLE_ADMIN')]
 final class GuestController extends AbstractController

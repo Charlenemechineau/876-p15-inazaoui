@@ -43,6 +43,36 @@ final class MediaControllerTest extends WebTestCase
         );
     }
 
+    // Dans ce test, je vérifie que la pagination
+// ne casse pas si la valeur de page est inférieure à 1.
+    public function testMediaListWithPageZeroUsesFirstPage(): void
+    {
+        $client = static::createClient();
+
+        $userRepository = static::getContainer()
+            ->get(UserRepository::class);
+
+        $admin = $userRepository->findOneBy([
+            'email' => 'ina@zaoui.com',
+        ]);
+
+        $this->assertNotNull($admin);
+
+        $client->loginUser($admin);
+
+        // Je demande volontairement une page invalide.
+        $client->request('GET', '/admin/media?page=0');
+
+        // La page doit rester accessible
+        // et être traitée comme la première page.
+        $this->assertResponseIsSuccessful();
+
+        $this->assertSelectorTextContains(
+            'main h1',
+            'Medias'
+        );
+    }
+
     // Dans ce test, je vérifie que l'administratrice
     // peut ajouter un nouveau média.
     public function testAdminCanCreateMedia(): void

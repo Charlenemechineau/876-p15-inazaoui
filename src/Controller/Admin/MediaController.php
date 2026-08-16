@@ -22,7 +22,7 @@ class MediaController extends AbstractController
          MediaRepository $mediaRepository
      ): Response
     {
-        $page = $request->query->getInt('page', 1);
+        $page = max(1, $request->query->getInt('page', 1));
 
         $criteria = [];
 
