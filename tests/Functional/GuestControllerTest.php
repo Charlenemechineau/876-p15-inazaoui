@@ -103,6 +103,57 @@ final class GuestControllerTest extends WebTestCase
         );
     }
 
+    // Dans ce test, je vérifie qu'il n'est pas possible
+    // de créer un invité avec une adresse e-mail déjà utilisée.
+    public function testAdminCannotCreateGuestWithExistingEmail(): void
+    {
+        $client = static::createClient();
+
+        $userRepository = static::getContainer()
+            ->get(UserRepository::class);
+
+        $admin = $userRepository->findOneBy([
+            'email' => 'ina@zaoui.com',
+        ]);
+
+        $existingGuest = $userRepository->findOneBy([
+            'email' => 'louis@funes.com',
+        ]);
+
+        $this->assertNotNull($admin);
+        $this->assertNotNull($existingGuest);
+
+        $client->loginUser($admin);
+
+        $client->request('GET', '/admin/guest/new');
+
+        $this->assertResponseIsSuccessful();
+
+        $client->submitForm('Ajouter', [
+            'guest[name]' => 'Invité doublon',
+            'guest[email]' => $existingGuest->getEmail(),
+            'guest[password]' => 'password',
+            'guest[description]' => 'Test avec une adresse déjà existante.',
+        ]);
+
+        // Je vérifie que Symfony refuse correctement
+        // les données du formulaire sans déclencher d'erreur serveur.
+        $this->assertResponseStatusCodeSame(422);
+
+        // Je vérifie que le message de validation est affiché.
+        $this->assertSelectorTextContains(
+            'body',
+            'Cette adresse e-mail est déjà utilisée.'
+        );
+
+        // Je vérifie qu'aucun nouvel utilisateur n'a été créé.
+        $users = $userRepository->findBy([
+            'email' => $existingGuest->getEmail(),
+        ]);
+
+        $this->assertCount(1, $users);
+    }
+
     // Je vérifie que l'administratrice
     // peut bloquer puis débloquer un invité.
     public function testAdminCanBlockAndUnblockGuest(): void

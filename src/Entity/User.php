@@ -10,9 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 // Permet à Symfony de reconnaître cette entité comme un utilisateur.
 use Symfony\Component\Security\Core\User\UserInterface;
+// Permet à Symfony de vérifier que l’adresse e-mail est unique en base de données.
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+// Permet à Symfony de valider les données de l’entité User.
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
+#[UniqueEntity(fields: ['email'], message: 'Cette adresse e-mail est déjà utilisée.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -35,6 +40,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $description;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\Email(message: 'L’adresse e-mail n’est pas valide.')]
     private ?string $email = null;
 
     //me permet de  stocker les rôles de l'utilisateur dans la base de données sous forme de tableau JSON
