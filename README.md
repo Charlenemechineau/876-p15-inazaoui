@@ -316,9 +316,44 @@ Ils couvrent notamment plusieurs fonctionnalités liées à :
 
 ### Couverture de code
 
-Un rapport de couverture de code HTML généré avec PHPUnit est fourni avec le projet.
+Un rapport de couverture de code HTML a été généré avec PHPUnit et Xdebug.
 
-Il permet de consulter le niveau de couverture des différentes parties testées de l'application.
+La suite de tests contient actuellement :
+
+- 52 tests ;
+- 161 assertions ;
+- 100 % des tests passent.
+
+La couverture obtenue est de :
+
+- 70,79 % des lignes ;
+- 78,87 % des méthodes et fonctions ;
+- 47,37 % des classes.
+
+Le rapport HTML complet est disponible dans :
+
+```text
+coverage/
+```
+
+Pour consulter le rapport, ouvrir le fichier :
+
+```text
+coverage/index.html
+```
+
+Pour régénérer la couverture avec Xdebug sous Linux ou macOS :
+
+```bash
+XDEBUG_MODE=coverage php bin/phpunit --coverage-html coverage
+```
+
+Sous Windows PowerShell :
+
+```powershell
+$env:XDEBUG_MODE="coverage"
+php bin/phpunit --coverage-html coverage
+```
 
 ## Performances
 
@@ -396,6 +431,7 @@ Elle permet notamment d'exécuter automatiquement les vérifications définies p
 ```text
 876-p15-inazaoui/
 ├── config/             Configuration Symfony
+├── coverage/           Rapport HTML de couverture PHPUnit
 ├── database/           Dumps SQL anonymisés
 ├── docs/               Documentation et rapports
 ├── migrations/         Migrations Doctrine

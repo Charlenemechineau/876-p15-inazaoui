@@ -6,15 +6,18 @@ Les tests automatisés permettent de vérifier le bon fonctionnement de l'applic
 
 Le projet contient des tests fonctionnels et des tests unitaires.
 
-## Les tests fonctionnels vérifient :
+## Les tests fonctionnels vérifient
+
 - l'authentification de l'administratrice ;
 - la gestion des invités ;
 - la gestion des albums ;
 - la gestion des médias ;
 - les différentes pages du Front Office ;
-- le comportement du repository utilisateur.
+- le comportement du repository utilisateur ;
+- la gestion des cas d'erreur, notamment la pagination des médias et la création d'un invité avec une adresse e-mail déjà utilisée.
 
-## Les tests unitaires vérifient :
+## Les tests unitaires vérifient
+
 - l'entité Album ;
 - l'entité Media ;
 - l'entité User ;
@@ -22,31 +25,62 @@ Le projet contient des tests fonctionnels et des tests unitaires.
 
 ## Résultat des tests automatisés
 
-- Tests exécutés : 50
-- Assertions : 150
-- Tests réussis : 50
+La suite complète de tests a été exécutée avec PHPUnit 9.6.19.
+
+- Tests exécutés : 52
+- Assertions : 161
+- Tests réussis : 52
 - Échecs : 0
 
 Résultat :
 
-OK (50 tests, 150 assertions)
+```text
+OK (52 tests, 161 assertions)
+```
 
 ## Couverture de code
 
-Rapport généré avec PHPUnit 9.6.19 et Xdebug 3.3.2.
+Le rapport de couverture a été généré avec PHPUnit et Xdebug.
 
-- Classes : 52,63 % (10/19)
-- Méthodes : 79,71 % (55/69)
-- Lignes : 70,43 % (262/372)
+Les résultats obtenus sont :
 
-La couverture de code des lignes atteint donc le seuil minimum de 70 % demandé.
+- Classes : 47,37 % (9/19)
+- Méthodes et fonctions : 78,87 % (56/71)
+- Lignes : 70,79 % (269/380)
+
+La couverture des lignes atteint donc 70,79 %.
+
+Le rapport HTML complet est disponible dans :
+
+```text
+coverage/
+```
+
+La page principale du rapport est :
+
+```text
+coverage/index.html
+```
 
 ## Commandes utilisées
 
-Exécution des tests :
+### Exécution des tests
 
+```bash
 php bin/phpunit
+```
 
-Génération du rapport de couverture :
+### Génération du rapport de couverture HTML
 
-php bin/phpunit --coverage-text
+Sous Linux ou macOS :
+
+```bash
+XDEBUG_MODE=coverage php bin/phpunit --coverage-html coverage
+```
+
+Sous Windows PowerShell :
+
+```powershell
+$env:XDEBUG_MODE="coverage"
+php bin/phpunit --coverage-html coverage
+```
