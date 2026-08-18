@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - "feat/**"
+      - "fix/**"
+      - "ci/**"
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    name: Tests et analyse
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ina_zaoui
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d ina_zaoui"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      APP_ENV: test
+      DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/ina_zaoui?serverVersion=16&charset=utf8"
+
+    steps:
+      - name: Récupération du projet
+        uses: actions/checkout@v4
+
+      - name: Installation de PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: ctype, iconv, pdo_pgsql
+          coverage: xdebug
+          tools: composer:v2
+
+      - name: Vérification de la version de PHP
+        run: php -v
+
+      - name: Installation des dépendances
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Création du schéma de la base de test
+        run: php bin/console doctrine:schema:create --env=test
+
+      - name: Chargement des fixtures
+        run: php bin/console doctrine:fixtures:load --env=test --no-interaction
+
+      - name: Tests unitaires et fonctionnels
+        run: php bin/phpunit
+
+      - name: Analyse de la couverture de code
+        env:
+          XDEBUG_MODE: coverage
+        run: php bin/phpunit --coverage-text --coverage-clover=coverage.xml
