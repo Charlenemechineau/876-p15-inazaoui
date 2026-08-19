@@ -98,3 +98,4 @@ jobs:
       - name: Analyse de la couverture de code
         env:
           XDEBUG_MODE: coverage
+        run: php bin/phpunit --coverage-text --coverage-clover=coverage.xml
