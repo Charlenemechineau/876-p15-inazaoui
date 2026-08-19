@@ -16,7 +16,7 @@ use App\Repository\MediaRepository; //Me permet d'utiliser le MediaRepository po
 class HomeController extends AbstractController
 {
      #[Route("/", name:"home")]
-    public function home()
+    public function home(): Response
     {
         return $this->render('front/home.html.twig');
     }
@@ -75,7 +75,7 @@ class HomeController extends AbstractController
 
 
      #[Route("/about", name:"about")]
-    public function about()
+    public function about(): Response
     {
         return $this->render('front/about.html.twig');
     }

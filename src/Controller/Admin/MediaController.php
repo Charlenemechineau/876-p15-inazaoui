@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\MediaRepository; //Me permet de utiliser le MediaRepository pour récupérer les médias//
 use Doctrine\ORM\EntityManagerInterface; // Me permet d'utiliser l'EntityManagerInterface pour gérer les entités//
 use Symfony\Component\HttpFoundation\Response; //Me permet d'utiliser la classe Response pour retourner une réponse HTTP//
+use App\Entity\User; //Me permet  d'utiliser l'entité User pour récupérer les informations de l'utilisateur connecté//
 
 class MediaController extends AbstractController
 {
@@ -60,8 +61,17 @@ class MediaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (!$this->isGranted('ROLE_ADMIN')) {
-                $media->setUser($this->getUser());
+                $user = $this->getUser();
+
+                if (!$user instanceof User) {
+                    throw $this->createAccessDeniedException(
+                        'Utilisateur non authentifié.'
+                    );
+                }
+
+                $media->setUser($user);
             }
+
             $fileName = md5(uniqid()) . '.' . $media->getFile()->guessExtension();
 
             $media->getFile()->move(

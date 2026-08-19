@@ -66,6 +66,9 @@ jobs:
       - name: Tests unitaires et fonctionnels
         run: php bin/phpunit
 
+      - name: Analyse statique PHPStan
+        run: php vendor/bin/phpstan analyse --memory-limit=512M
+
       - name: Analyse de la couverture de code
         env:
           XDEBUG_MODE: coverage

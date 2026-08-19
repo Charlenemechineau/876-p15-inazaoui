@@ -11,14 +11,8 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @extends ServiceEntityRepository<User>
- *
- * @implements PasswordUpgraderInterface<User>
- *
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
+
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     public function __construct(ManagerRegistry $registry)
@@ -66,6 +60,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 //    }
 // Me permet de récupérer tous les invités avec leurs médias
 // en une seule requête pour éviter le problème N+1.
+
+    /**
+     * @return list<User>
+     */
     public function findGuestsWithMedias(): array
     {
         return $this->createQueryBuilder('u')
