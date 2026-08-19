@@ -1,5 +1,5 @@
-name: CI
-
+# Me permet de lancer automatiquement la CI
+# quand je fais un push sur une des branches indiquées.
 on:
   push:
     branches:
@@ -8,6 +8,9 @@ on:
       - "fix/**"
       - "test/**"
       - "ci/**"
+
+  # Me permet aussi de lancer la CI
+  # lorsqu'une Pull Request est faite vers main.
   pull_request:
     branches:
       - main
@@ -15,8 +18,12 @@ on:
 jobs:
   tests:
     name: Tests et analyse
+
+    # Me permet d'exécuter la CI sur une machine Ubuntu.
     runs-on: ubuntu-latest
 
+    # Me permet de créer une base PostgreSQL
+    # qui sera utilisée pendant les tests.
     services:
       postgres:
         image: postgres:16
@@ -26,20 +33,28 @@ jobs:
           POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
+
+        # Me permet de vérifier que PostgreSQL
+        # est bien démarré avant de continuer.
         options: >-
           --health-cmd="pg_isready -U postgres -d ina_zaoui"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
+    # Me permet d'indiquer que la CI utilise
+    # l'environnement de test et la base de données de test.
     env:
       APP_ENV: test
       DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/ina_zaoui?serverVersion=16&charset=utf8"
 
     steps:
+      # Me permet de récupérer le code du projet.
       - name: Récupération du projet
         uses: actions/checkout@v5
 
+      # Me permet d'installer PHP et les outils
+      # nécessaires pour exécuter le projet et les tests.
       - name: Installation de PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -48,28 +63,38 @@ jobs:
           coverage: xdebug
           tools: composer:v2
 
+      # Me permet de vérifier la version de PHP utilisée.
       - name: Vérification de la version de PHP
         run: php -v
 
+      # Me permet d'installer les dépendances du projet.
       - name: Installation des dépendances
         run: composer install --prefer-dist --no-interaction --no-progress
 
+      # Me permet de créer la base de données utilisée pour les tests.
       - name: Création de la base de test
         run: php bin/console doctrine:database:create --env=test
 
+      # Me permet de créer les tables dans la base de test.
       - name: Création du schéma de la base de test
         run: php bin/console doctrine:schema:create --env=test
 
+      # Me permet d'ajouter les données nécessaires
+      # pour pouvoir exécuter mes tests.
       - name: Chargement des fixtures
         run: php bin/console doctrine:fixtures:load --env=test --no-interaction
 
+      # Me permet d'exécuter mes tests unitaires et fonctionnels.
       - name: Tests unitaires et fonctionnels
         run: php bin/phpunit
 
+      # Me permet d'analyser mon code avec PHPStan
+      # pour détecter des erreurs dans le code.
       - name: Analyse statique PHPStan
         run: php vendor/bin/phpstan analyse --memory-limit=512M
 
+      # Me permet de calculer la couverture de mon code
+      # par les tests grâce à Xdebug.
       - name: Analyse de la couverture de code
         env:
           XDEBUG_MODE: coverage
-        run: php bin/phpunit --coverage-text --coverage-clover=coverage.xml
