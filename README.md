@@ -52,6 +52,7 @@ Le projet utilise principalement :
 - Twig ;
 - Bootstrap ;
 - PHPUnit ;
+- PHPStan ;
 - Git / GitHub.
 
 ## Prérequis
@@ -320,8 +321,8 @@ Un rapport de couverture de code HTML a été généré avec PHPUnit et Xdebug.
 
 La suite de tests contient actuellement :
 
-- 52 tests ;
-- 161 assertions ;
+- 53 tests ;
+- 167 assertions ;
 - 100 % des tests passent.
 
 La couverture obtenue est de :

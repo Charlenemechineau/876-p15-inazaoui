@@ -49,6 +49,7 @@ Les principaux préfixes utilisés dans le projet sont :
 - `test:` ajout ou modification de tests
 - `perf:` amélioration des performances
 - `docs:` ajout ou modification de documentation
+- `ci:` modification de l'intégration continue
 
 Exemple :
 
@@ -105,7 +106,10 @@ Lorsqu'une nouvelle fonctionnalité est ajoutée ou qu'un comportement important
 
 Avant de créer une Pull Request, l'ensemble de la suite de tests doit être exécuté afin de vérifier qu'aucune régression n'a été introduite.
 
-## 4. Pull Request
+
+## 4. Issues, Pull Request et revue de code
+
+Lorsqu'un problème, une amélioration ou une nouvelle fonctionnalité est identifié, une Issue GitHub peut être créée afin de décrire le besoin et de suivre son avancement.
 
 Une fois le développement terminé et testé, la branche peut être proposée pour intégration dans `main` à l'aide d'une Pull Request.
 
@@ -113,11 +117,14 @@ Avant de créer une Pull Request :
 
 - vérifier que le projet fonctionne correctement en local ;
 - vérifier que les tests unitaires et fonctionnels passent ;
+- vérifier que l'analyse PHPStan ne retourne aucune erreur ;
 - vérifier les fichiers modifiés avec `git status` ;
 - vérifier que la branche contient uniquement les modifications liées à la fonctionnalité ou au correctif concerné ;
 - rédiger une description claire des modifications réalisées.
 
 Une Pull Request doit rester centrée sur une fonctionnalité ou une correction afin de faciliter sa compréhension et sa relecture.
+
+La revue de code permet à un autre développeur de vérifier les modifications avant leur intégration dans `main`.
 
 En cas de remarques pendant la revue de code, les corrections doivent être effectuées sur la même branche puis ajoutées à la Pull Request.
 
@@ -162,6 +169,21 @@ Avant de terminer une contribution, vérifier les points suivants :
 - la documentation a été mise à jour si le fonctionnement du projet a changé ;
 - les commits sont clairs et compréhensibles.
 
-## 8. Cadre du projet
+
+## 8. Intégration continue
+
+Le projet utilise GitHub Actions pour vérifier automatiquement le projet lors des push et des Pull Requests.
+
+La CI me permet notamment de :
+
+- créer une base PostgreSQL réservée aux tests ;
+- charger les fixtures ;
+- exécuter les tests unitaires et fonctionnels avec PHPUnit ;
+- analyser le code avec PHPStan ;
+- générer la couverture de code avec Xdebug.
+
+Avant de proposer une Pull Request, il faut vérifier que la CI passe correctement.
+
+## 9. Cadre du projet
 
 Ce projet a été réalisé dans le cadre de mon parcours  **Développeur d'Applications PHP/Symfony d'OpenClassrooms**.
