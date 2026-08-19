@@ -116,6 +116,44 @@ final class SecurityControllerTest extends WebTestCase
         $this->assertSelectorNotExists('a[href="/admin/guest"]');
         $this->assertSelectorNotExists('a[href="/admin/album"]');
     }
+    // Dans ce test, je vérifie qu'un utilisateur connecté
+    // peut se déconnecter correctement de l'application.
+    public function testUserCanLogout(): void
+    {
+        $client = static::createClient();
+
+        // J'ouvre la page de connexion.
+        $client->request('GET', '/login');
+
+        // Je me connecte avec un invité actif.
+        $client->submitForm('Connexion', [
+            '_username' => 'louis@funes.com',
+            '_password' => 'password',
+        ]);
+
+        // Je vérifie que la connexion a fonctionné.
+        $this->assertResponseRedirects('/admin/media');
+
+        $client->followRedirect();
+
+        $this->assertResponseIsSuccessful();
+
+        // Je demande la déconnexion.
+        $client->request('GET', '/logout');
+
+        // Je vérifie que Symfony effectue bien une redirection
+        // après la déconnexion.
+        $this->assertResponseRedirects();
+
+        $client->followRedirect();
+
+        // Je tente ensuite d'accéder à une page protégée.
+        $client->request('GET', '/admin/media');
+
+        // L'utilisateur étant déconnecté,
+        // il doit être renvoyé vers la page de connexion.
+        $this->assertResponseRedirects('/login');
+    }
 
     // Dans ce test, je vérifie qu'un invité
     // ne peut pas accéder à la gestion des invités.

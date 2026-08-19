@@ -27,15 +27,15 @@ Le projet contient des tests fonctionnels et des tests unitaires.
 
 La suite complète de tests a été exécutée avec PHPUnit 9.6.19.
 
-- Tests exécutés : 52
-- Assertions : 161
-- Tests réussis : 52
+- Tests exécutés : 53
+- Assertions : 167
+- Tests réussis : 53
 - Échecs : 0
 
 Résultat :
 
 ```text
-OK (52 tests, 161 assertions)
+OK (53 tests, 167 assertions)
 ```
 
 ## Couverture de code
